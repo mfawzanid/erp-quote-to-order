@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  role        Role     @default(CUSTOMER)
+  createdAt   DateTime @default(now())
+  
+  customerId  String? // associates user with role CUSTOMER to Customer
+  customer    Customer? @relation(fields: [customerId], references: [id])
+}
+
+model Customer { // our customer is a company
+  id          String   @id @default(uuid())
+  name        String // so it should be our client company's name
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
+  quotations  Quotation[]
+  salesOrders SalesOrder[]
+}
+
+model Product {
+  id        String   @id @default(uuid())
+  name      String
+  unitPrice Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quotationItems  QuotationItem[]
+  salesOrderItems SalesOrderItem[]
+}
+
+model Quotation {
+  id         String          @id @default(uuid())
+  customer   Customer        @relation(fields: [customerId], references: [id])
+  customerId String
+  status     QuotationStatus @default(PENDING)
+  createdAt  DateTime        @default(now())
+  createdBy  String
+  updatedAt  DateTime        @updatedAt
+  updatedBy  String?
+
+  items      QuotationItem[]
+  salesOrder SalesOrder?
+}
+
+model QuotationItem {
+  id          String    @id @default(uuid())
+  quotation   Quotation @relation(fields: [quotationId], references: [id])
+  quotationId String
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   String
+  quantity    Int
+  unitPrice   Int
+
+  @@unique([quotationId, productId])
+}
+
+model SalesOrder {
+  id          String           @id @default(uuid())
+  quotation   Quotation        @relation(fields: [quotationId], references: [id])
+  quotationId String           @unique
+  customer    Customer         @relation(fields: [customerId], references: [id])
+  customerId  String
+  status      SalesOrderStatus @default(NEW)
+  createdAt   DateTime         @default(now())
+  createdBy   String
+
+  items   SalesOrderItem[]
+}
+
+model SalesOrderItem {
+  id           String     @id @default(uuid())
+  salesOrder   SalesOrder @relation(fields: [salesOrderId], references: [id])
+  salesOrderId String
+  product      Product    @relation(fields: [productId], references: [id])
+  productId    String
+  quantity     Int
+  unitPrice    Int
+
+  @@unique([salesOrderId, productId])
+}
+
+enum QuotationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum SalesOrderStatus {
+  NEW
+  PROCESSING
+  COMPLETED
+}
+
+enum Role {
+  CUSTOMER
+  SALES
+}
