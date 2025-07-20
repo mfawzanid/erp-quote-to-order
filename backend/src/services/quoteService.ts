@@ -1,5 +1,6 @@
 import { QuotationStatus } from "@prisma/client";
 import * as quoteRepo from "../repositories/quoteRepository";
+import * as productRepo from "../repositories/productRepository";
 
 type QuotationItem = {
     productId: string;
@@ -21,16 +22,32 @@ export const createQuotation = async (data: CreateQuotationInput) => {
         throw new Error('error create quotation: product item is mandatory');
 
     for (const item of items) {
-        if (!item.productId || item.quantity <= 0 || item.unitPrice < 0) {
-            throw new Error('error create quotation: product id, quantity, and unit price is not valid');
+        if (!item.productId || item.quantity <= 0) {
+            throw new Error('error create quotation: product id or quantity is not valid');
         }
     }
+
+    const productIds = items.map((item) => item.productId);
+    const products = await productRepo.getProductsByIds(productIds);
+    const productPriceMap = new Map(products.map((p) => [p.id, p.unitPrice]));
+
+    const enrichedItems = items.map((item) => {
+        const unitPrice = productPriceMap.get(item.productId);
+        if (unitPrice === undefined) {
+            throw new Error(`error create quotation: product not found for id ${item.productId}`);
+        }
+
+        return {
+            ...item,
+            unitPrice,
+        };
+    });
 
     return quoteRepo.createQuotation({
         customerId,
         status: QuotationStatus.PENDING,
         createdBy: "todo", // TODO
-        items,
+        items: enrichedItems,
     });
 };
 

@@ -3,10 +3,12 @@ import quoteRoute from "./routes/quoteRoute";
 import customerRoute from "./routes/customerRoute";
 import productRoute from "./routes/productRoute";
 import salesOrderRoute from "./routes/salesOrderRoute";
+import cors from "cors";
 
 const app = express()
 const port = 3000
 
+app.use(cors());
 app.use(express.json())
 
 app.use("/customers", customerRoute)

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 const prisma = new PrismaClient()
@@ -39,4 +39,28 @@ export const getSalesOrderByQuotationId = async (quotationId: string) => {
             },
         },
     });
+};
+
+export const getSalesOrders = async (params: {
+    page: number;
+    pageSize: number;
+}) => {
+    const { page, pageSize } = params;
+
+    const [items, total] = await Promise.all([
+        prisma.salesOrder.findMany({
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+            orderBy: { createdAt: 'desc' },
+            include: {
+                customer: true,
+                items: {
+                    include: { product: true },
+                },
+            },
+        }),
+        prisma.salesOrder.count(),
+    ]);
+
+    return { items, total };
 };

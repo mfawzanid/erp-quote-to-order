@@ -13,3 +13,7 @@ export const createProduct = async (data: {
 
     return productRepo.createProduct({ name, unitPrice, quantity });
 };
+
+export const getProducts = async () => {
+    return productRepo.getProducts();
+};

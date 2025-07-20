@@ -5,3 +5,8 @@ export const createProduct = async (req: Request, res: Response) => {
     const product = await productService.createProduct(req.body);
     res.status(201).json(product);
 };
+
+export const getProducts = async (req: Request, res: Response) => {
+    const order = await productService.getProducts();
+    res.status(200).json(order);
+};

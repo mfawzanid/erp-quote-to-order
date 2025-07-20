@@ -6,5 +6,6 @@ const router = Router();
 
 router.post("/", asyncHandler(salesOrderController.createSalesOrder));
 router.get("/:quotationId", salesOrderController.getSalesOrderByQuotationId);
+router.get("/", salesOrderController.getSalesOrders);
 
 export default router;

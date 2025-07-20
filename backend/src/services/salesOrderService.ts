@@ -24,3 +24,10 @@ export const createSalesOrder = async (quotationId: string) => {
 export const getSalesOrderByQuotationId = async (quotationId: string) => {
     return salesOrderRepo.getSalesOrderByQuotationId(quotationId);
 };
+
+export const getSalesOrders = async (params: {
+    page: number;
+    pageSize: number;
+}) => {
+    return salesOrderRepo.getSalesOrders(params);
+};
