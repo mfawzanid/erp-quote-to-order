@@ -3,6 +3,7 @@ import quoteRoute from "./routes/quoteRoute";
 import customerRoute from "./routes/customerRoute";
 import productRoute from "./routes/productRoute";
 import salesOrderRoute from "./routes/salesOrderRoute";
+import authRoute from "./routes/authRoute";
 import cors from "cors";
 
 const app = express()
@@ -15,6 +16,7 @@ app.use("/customers", customerRoute)
 app.use("/quotations", quoteRoute);
 app.use("/products", productRoute)
 app.use("/sales-orders", salesOrderRoute)
+app.use("/auth", authRoute)
 
 app.get("/", (req, res) => {
     res.send("status is ok");
