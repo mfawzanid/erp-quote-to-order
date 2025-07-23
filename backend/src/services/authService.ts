@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import * as userRepository from "../repositories/userRepository";
 import { RegisterRequest } from "../types/auth";
+import { generateToken } from "../utils/jwt";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -15,7 +16,7 @@ export async function registerUser(registerReq: RegisterRequest): Promise<string
 
     user = await userRepository.createUser(registerReq);
 
-    return generateToken(user.id, user.email);
+    return generateToken({ userId: user.id, role: registerReq.role });
 }
 
 export async function loginUser(email: string): Promise<string> {
@@ -24,11 +25,6 @@ export async function loginUser(email: string): Promise<string> {
         throw new Error("error login user: user not found");
     }
 
-    return generateToken(user.id, user.email);
+    return generateToken({ userId: user.id, role: user.role });
 }
 
-function generateToken(userId: string, email: string): string {
-    return jwt.sign({ userId, email }, JWT_SECRET, {
-        expiresIn: "1d",
-    });
-}
