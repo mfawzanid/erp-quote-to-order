@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { User, Role } from "@prisma/client";
+import { RegisterRequest } from "../types/auth";
 
 const prisma = new PrismaClient()
 

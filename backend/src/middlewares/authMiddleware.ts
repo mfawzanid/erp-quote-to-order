@@ -26,7 +26,7 @@ export function authenticate(allowedRoles?: Role[]) {
                 role: payload.role,
             };
 
-            if (allowedRoles && !allowedRoles.includes(payload.role)) {
+            if (allowedRoles && !allowedRoles.includes(payload.role as Role)) {
                 return res.status(403).json({ error: "error forbidden: insufficient role" });
             }
 
