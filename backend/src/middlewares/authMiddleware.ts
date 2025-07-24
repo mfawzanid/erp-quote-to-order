@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/jwt";
 import { Role } from "../types/role";
 
+const enableAuthentication = process.env.ENABLE_AUTHENTICATION === "true";
+
 export interface AuthenticatedRequest extends Request {
     user?: {
         userId: string;
@@ -11,6 +13,8 @@ export interface AuthenticatedRequest extends Request {
 
 export function authenticate(allowedRoles?: Role[]) {
     return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+        if (!enableAuthentication) { return next() };
+
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
