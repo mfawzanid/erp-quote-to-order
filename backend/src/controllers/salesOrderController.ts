@@ -37,6 +37,6 @@ export const getSalesOrders = async (req: Request, res: Response) => {
         page,
         pageSize,
         total: result.total,
-        data: result
+        data: result.items,
     })
 };

@@ -15,13 +15,18 @@ export function authenticate(allowedRoles?: Role[]) {
     return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
         if (!enableAuthentication) { return next() };
 
-        const authHeader = req.headers.authorization;
+        let token: string | undefined;
 
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(401).json({ error: "error unauthorized: no token provided" });
+        const authHeader = req.headers.authorization;
+        if (authHeader?.startsWith("Bearer ")) {
+            token = authHeader.split(" ")[1];
+        } else if (req.cookies?.token) {
+            token = req.cookies.token;
         }
 
-        const token = authHeader.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ error: "error unauthorized: no token provided" });
+        }
 
         try {
             const payload = verifyToken(token);

@@ -5,11 +5,18 @@ import productRoute from "./routes/productRoute";
 import salesOrderRoute from "./routes/salesOrderRoute";
 import authRoute from "./routes/authRoute";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express()
 const port = 3000
 
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+}));
+
+app.use(cookieParser());
+
 app.use(express.json())
 
 app.use("/customers", customerRoute)
