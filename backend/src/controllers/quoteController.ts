@@ -10,19 +10,18 @@ export const createQuotation = async (req: AuthenticatedRequest, res: Response) 
     res.status(201).json(quote);
 };
 
-export const approveQuotation = async (req: Request, res: Response) => {
+export const approveQuotation = async (req: AuthenticatedRequest, res: Response) => {
+    const { userId } = (req as AuthenticatedRequest).user!;
     const { id } = req.params;
-    const item = await quoteService.approveQuotation({ id });
+
+    const item = await quoteService.approveQuotation({ id, userId });
     res.status(200).json(item);
 };
 
 
 export const getQuotations = async (req: AuthenticatedRequest, res: Response) => {
-    const userId = req.user?.userId
     const role = req.user?.role
     const customerId = req.user?.customerId
-
-    console.log(`userId: ${userId}; role: ${role}; customerId: ${customerId}`)
 
     const status = typeof req.query.status === "string" ? req.query.status : undefined
 

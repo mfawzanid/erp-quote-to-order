@@ -31,14 +31,43 @@ export const createQuotation = async (data: {
     });
 };
 
-export const updateQuotationStatus = async (data: { id: string; status: string }) => {
-    return prisma.quotation.update({
-        where: {
-            id: data.id,
-        },
+export const updateQuotationStatus = async (params: {
+    id: string;
+    userId: string;
+    newStatus: QuotationStatus;
+}) => {
+    const { id, userId, newStatus } = params;
+
+    return await prisma.$transaction(async (tx) => {
+        const existingQuotation = await tx.quotation.findUnique({
+            where: { id },
+            select: { status: true },
+        });
+
+        if (!existingQuotation) {
+            throw new Error("error repo update quotation status: id not found");
+        }
+
+        const oldStatus = existingQuotation.status;
+
+        await tx.quotation.update({
+            where: { id },
+            data: {
+                status: newStatus,
+                updatedBy: userId,
+            },
+        });
+
+        await tx.quotationStatusHistory.create({
         data: {
-            status: data.status as QuotationStatus,
+                quotationId: id,
+                oldStatus,
+                newStatus,
+                changedBy: userId,
         },
+    });
+
+        return { success: true };
     });
 };
 
@@ -101,6 +130,22 @@ export const getQuotationWithProductItems = async (id: string) => {
                     product: true,
                 },
             },
+        },
+    });
+};
+
+export const createStatusHistory = async (data: {
+    quotationId: string;
+    oldStatus: QuotationStatus;
+    newStatus: QuotationStatus;
+    changedByUserId: string;
+}) => {
+    return prisma.quotationStatusHistory.create({
+        data: {
+            quotationId: data.quotationId,
+            oldStatus: data.oldStatus,
+            newStatus: data.newStatus,
+            changedBy: data.changedByUserId,
         },
     });
 };

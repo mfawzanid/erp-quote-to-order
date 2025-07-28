@@ -5,8 +5,6 @@ import { authenticate } from "../middlewares/authMiddleware";
 
 const router = Router();
 
-router.use(authenticate);
-
-router.post("/", asyncHandler(customerController.createCustomer));
+router.post("/", authenticate(), asyncHandler(customerController.createCustomer));
 
 export default router;

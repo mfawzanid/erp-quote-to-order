@@ -22,6 +22,8 @@ model User {
   
   customerId  String? // associates user with role CUSTOMER to Customer
   customer    Customer? @relation(fields: [customerId], references: [id])
+
+  statusChanges QuotationStatusHistory[] @relation("UserStatusChanges")
 }
 
 model Customer { // our customer is a company
@@ -59,6 +61,8 @@ model Quotation {
 
   items      QuotationItem[]
   salesOrder SalesOrder?
+
+  statusHistory QuotationStatusHistory[]
 }
 
 model QuotationItem {
@@ -96,6 +100,19 @@ model SalesOrderItem {
   unitPrice    Int
 
   @@unique([salesOrderId, productId])
+}
+
+model QuotationStatusHistory {
+  id           String          @id @default(uuid())
+  quotation    Quotation       @relation(fields: [quotationId], references: [id])
+  quotationId  String
+
+  oldStatus    QuotationStatus
+  newStatus    QuotationStatus
+
+  changedAt    DateTime        @default(now())
+  changedBy    String
+  changedByUser User           @relation("UserStatusChanges", fields: [changedBy], references: [id])
 }
 
 enum QuotationStatus {

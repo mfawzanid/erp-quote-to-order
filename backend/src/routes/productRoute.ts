@@ -5,9 +5,7 @@ import { authenticate } from "../middlewares/authMiddleware";
 
 const router = Router();
 
-router.use(authenticate);
-
-router.post("/", asyncHandler(productController.createProduct));
-router.get("/", asyncHandler(productController.getProducts));
+router.post("/", authenticate(), asyncHandler(productController.createProduct));
+router.get("/", authenticate(), asyncHandler(productController.getProducts));
 
 export default router;

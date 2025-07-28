@@ -54,12 +54,14 @@ export const createQuotation = async (
     });
 };
 
-export const approveQuotation = async (data: { id: string }) => {
+export const approveQuotation = async (data: { id: string, userId: string }) => {
     if (!data.id) throw new Error("error approve quotation: quotation id is mandatory");
+    if (!data.userId) throw new Error("error approve quotation: user id is mandatory");
 
     return quoteRepo.updateQuotationStatus({
         id: data.id,
-        status: QuotationStatus.APPROVED,
+        userId: data.userId,
+        newStatus: QuotationStatus.APPROVED,
     });
 };
 
