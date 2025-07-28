@@ -2,22 +2,20 @@ import { QuotationStatus } from "@prisma/client";
 import * as quoteRepo from "../repositories/quoteRepository";
 import * as productRepo from "../repositories/productRepository";
 
-type QuotationItem = {
-    productId: string;
-    quantity: number;
-    unitPrice: number;
-};
-
 type CreateQuotationInput = {
-    customerId: string;
-    items: QuotationItem[];
+    items: {
+        productId: string;
+        quantity: number;
+        unitPrice: number;
+    }[];
 };
 
 export const createQuotation = async (
     data: CreateQuotationInput,
+    customerId: string,
     createdBy: string,
 ) => {
-    const { customerId, items } = data;
+    const { items } = data;
 
     if (!customerId) throw new Error('error create quotation: customer id is required');
 

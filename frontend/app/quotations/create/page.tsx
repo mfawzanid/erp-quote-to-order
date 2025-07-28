@@ -35,7 +35,6 @@ export default function CreateQuotationPage() {
     const handleSubmit = async () => {
         try {
             const payload = {
-                customerId: "0effe418-657b-41fd-acdc-133aaa8ae082", // TODO
                 items: items.map((item) => ({
                     productId: item.product.id,
                     quantity: item.quantity,

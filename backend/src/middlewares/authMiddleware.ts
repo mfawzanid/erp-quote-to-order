@@ -31,6 +31,9 @@ export function authenticate(allowedRoles?: Role[]) {
 
         try {
             const payload = verifyToken(token);
+
+            console.log(`customerId: ${payload.customerId}`)
+
             req.user = {
                 userId: payload.userId,
                 role: payload.role,

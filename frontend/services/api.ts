@@ -15,7 +15,6 @@ export const getProducts = async () => {
 };
 
 export const createQuotation = async (payload: {
-    customerId: string;
     items: { productId: string; quantity: number }[];
 }) => {
   const res = await fetch(`${API_URL}/quotations`, {

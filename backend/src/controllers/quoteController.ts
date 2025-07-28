@@ -4,9 +4,16 @@ import { AuthenticatedRequest } from "../middlewares/authMiddleware";
 
 
 export const createQuotation = async (req: AuthenticatedRequest, res: Response) => {
-    const { userId } = (req as AuthenticatedRequest).user!;
+    const { userId, customerId, role } = req.user!;
 
-    const quote = await quoteService.createQuotation(req.body, userId);
+    if (role !== 'CUSTOMER') {
+        return res.status(403).json({ message: "error create quotation: role is not allowed" });
+    }
+    if (!customerId) {
+        return res.status(400).json({ message: "error create quotation: customerId is mandatory in token" });
+    }
+
+    const quote = await quoteService.createQuotation(req.body, customerId, userId);
     res.status(201).json(quote);
 };
 
