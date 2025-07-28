@@ -43,15 +43,20 @@ export const updateQuotationStatus = async (data: { id: string; status: string }
 };
 
 export const getQuotations = async (params: {
+    customerId?: string;
     status?: string;
     startAt?: Date;
     endAt?: Date;
     page: number;
     pageSize: number;
 }) => {
-    const { status, startAt, endAt, page, pageSize } = params;
+    const { customerId, status, startAt, endAt, page, pageSize } = params;
 
     const where: Prisma.QuotationWhereInput = {};
+
+    if (customerId) {
+        where.customerId = customerId;
+    }
 
     if (status && Object.values(QuotationStatus).includes(status as QuotationStatus)) {
         where.status = status as QuotationStatus;

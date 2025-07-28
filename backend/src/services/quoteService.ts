@@ -13,7 +13,10 @@ type CreateQuotationInput = {
     items: QuotationItem[];
 };
 
-export const createQuotation = async (data: CreateQuotationInput) => {
+export const createQuotation = async (
+    data: CreateQuotationInput,
+    createdBy: string,
+) => {
     const { customerId, items } = data;
 
     if (!customerId) throw new Error('error create quotation: customer id is required');
@@ -46,7 +49,7 @@ export const createQuotation = async (data: CreateQuotationInput) => {
     return quoteRepo.createQuotation({
         customerId,
         status: QuotationStatus.PENDING,
-        createdBy: "todo", // TODO
+        createdBy, 
         items: enrichedItems,
     });
 };
@@ -61,11 +64,26 @@ export const approveQuotation = async (data: { id: string }) => {
 };
 
 export const getQuotations = async (params: {
+    role?: string;
+    customerId?: string;
     status?: string;
     startAt?: Date;
     endAt?: Date;
     page: number;
     pageSize: number;
 }) => {
+    const { role, customerId } = params;
+
+    if (!role) {
+        throw new Error("error get quotations: role is empty");
+    }
+
+    if (role === "CUSTOMER" && !customerId) {
+        return {
+            items: [],
+            total: 0,
+        };
+    }
+
     return quoteRepo.getQuotations(params);
 };

@@ -1,7 +1,7 @@
 import * as quoteRepo from "../repositories/quoteRepository";
 import * as salesOrderRepo from "../repositories/salesOrderRepository";
 
-export const createSalesOrder = async (quotationId: string) => {
+export const createSalesOrder = async (quotationId: string, createdBy: string) => {
     const quotation = await quoteRepo.getQuotationWithProductItems(quotationId);
 
     if (!quotation) throw new Error("error create sales order: quotation not found");
@@ -10,7 +10,7 @@ export const createSalesOrder = async (quotationId: string) => {
     const order = await salesOrderRepo.createSalesOrderFromQuotation({
         id: quotation.id,
         customerId: quotation.customerId,
-        createdBy: "todo", // TODO
+        createdBy,
         items: quotation.items.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,

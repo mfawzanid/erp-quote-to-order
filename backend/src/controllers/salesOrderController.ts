@@ -1,13 +1,16 @@
 import { Request, Response } from "express";
 import * as salesOrderService from "../services/salesOrderService";
+import { AuthenticatedRequest } from "../middlewares/authMiddleware";
 
-export const createSalesOrder = async (req: Request, res: Response) => {
+export const createSalesOrder = async (req: AuthenticatedRequest, res: Response) => {
+    const { userId } = (req as AuthenticatedRequest).user!;
+
     const { quotationId } = req.body;
     if (!quotationId) {
         return res.status(400).json({ error: "error create sales order: quotation id is mandatory" });
     }
 
-    const customer = await salesOrderService.createSalesOrder(quotationId);
+    const customer = await salesOrderService.createSalesOrder(quotationId, userId);
     res.status(201).json(customer);
 };
 

@@ -16,7 +16,11 @@ export async function registerUser(registerReq: RegisterRequest): Promise<string
 
     user = await userRepository.createUser(registerReq);
 
-    return generateToken({ userId: user.id, role: registerReq.role });
+    return generateToken({
+        userId: user.id,
+        role: registerReq.role,
+        customerId: user.customerId ?? undefined
+    });
 }
 
 export async function loginUser(email: string): Promise<string> {
@@ -25,6 +29,10 @@ export async function loginUser(email: string): Promise<string> {
         throw new Error("error login user: user not found");
     }
 
-    return generateToken({ userId: user.id, role: user.role });
+    return generateToken({
+        userId: user.id,
+        role: user.role,
+        customerId: user.customerId ?? undefined
+    });
 }
 

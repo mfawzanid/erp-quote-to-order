@@ -11,6 +11,7 @@ const JWT_EXPIRES_IN = "1d";
 interface TokenPayload {
     userId: string;
     role: string;
+    customerId?: string,
 }
 
 export function generateToken(payload: TokenPayload): string {

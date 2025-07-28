@@ -8,6 +8,7 @@ export interface AuthenticatedRequest extends Request {
     user?: {
         userId: string;
         role: string;
+        customerId?: string;
     };
 }
 
@@ -33,6 +34,7 @@ export function authenticate(allowedRoles?: Role[]) {
             req.user = {
                 userId: payload.userId,
                 role: payload.role,
+                customerId: payload.customerId
             };
 
             if (allowedRoles && !allowedRoles.includes(payload.role as Role)) {

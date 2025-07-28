@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import * as quoteService from "../services/quoteService";
+import { AuthenticatedRequest } from "../middlewares/authMiddleware";
 
-export const createQuotation = async (req: Request, res: Response) => {
-    const quote = await quoteService.createQuotation(req.body);
+
+export const createQuotation = async (req: AuthenticatedRequest, res: Response) => {
+    const { userId } = (req as AuthenticatedRequest).user!;
+
+    const quote = await quoteService.createQuotation(req.body, userId);
     res.status(201).json(quote);
 };
 
@@ -12,7 +16,14 @@ export const approveQuotation = async (req: Request, res: Response) => {
     res.status(200).json(item);
 };
 
-export const getQuotations = async (req: Request, res: Response) => {
+
+export const getQuotations = async (req: AuthenticatedRequest, res: Response) => {
+    const userId = req.user?.userId
+    const role = req.user?.role
+    const customerId = req.user?.customerId
+
+    console.log(`userId: ${userId}; role: ${role}; customerId: ${customerId}`)
+
     const status = typeof req.query.status === "string" ? req.query.status : undefined
 
     const dateStr = typeof req.query.date === "string" ? req.query.date : undefined
@@ -33,6 +44,8 @@ export const getQuotations = async (req: Request, res: Response) => {
     const pageSize = parseInt(req.query.pageSize as string) || 10;
 
     const result = await quoteService.getQuotations({
+        role,
+        customerId: role === "CUSTOMER" ? customerId : undefined,
         status,
         startAt,
         endAt,

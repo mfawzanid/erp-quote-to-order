@@ -7,6 +7,9 @@ const prisma = new PrismaClient()
 export async function findUserByEmail(email: string): Promise<User | null> {
     return prisma.user.findUnique({
         where: { email },
+        include: {
+            customer: true,
+        }
     });
 }
 
