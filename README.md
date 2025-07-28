@@ -2,6 +2,9 @@
 
 A simple ERP (Enterprise Resource Planning) that allows sales teams to create quotations and convert them into sales orders. This project includes authentication, role-based access control, and basic product and quotation management.
 
+### Database Schema
+[View Database Schema](./Database.md)
+
 ## Features
 
 - Customer and product management
@@ -19,19 +22,21 @@ A simple ERP (Enterprise Resource Planning) that allows sales teams to create qu
 - [x] `POST /quotations`
 - [x] `PUT /quotations/:id/approve`
 - [x] `POST /sales-orders` 
-- [x] `GET /quotations` (paginated, filter by status/date)
+- [x] `GET /quotations`
 - [x] `GET /sales-orders?quotationId={id}`
+
+[View API Details](./API.md)
 
 ### Auth & Access Control
 
 - [x] JWT-based authentication in backend 
-- [ ] JWT-based authentication implementation in frontend
+- [x] JWT-based authentication implementation in frontend
 - [x] Roles: `customer`, `sales`
 - [x] Enforce role checks
 
-### 🔧 Tracking & Auditing 
+### Tracking & Auditing 
 
-- [ ] Track status history with audit fields: `createdBy`, `approvedBy`
+- [x] Track status history with audit fields: `createdBy`, `approvedBy`
 
 ## Getting Started
 
@@ -43,3 +48,4 @@ docker compose up --build
 
 - Backend API: http://localhost:3000
 - Frontend: http://localhost:3001
+

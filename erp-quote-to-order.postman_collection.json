@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "ec42cfeb-e8de-4d96-be1e-cf421b666cb3",
+		"name": "erp-quote-to-order",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40561535"
+	},
+	"item": [
+		{
+			"name": "CreateCustomer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"customer_1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateProduct",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"product_1\",\n    \"unitPrice\": 2000,\n    \"quantity\": 50\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/products",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateQuote",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"user_1\",\n    \"email\": \"user_1@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ApproveQuote",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMDA5YTRjNS1mZGY0LTQ5NjEtODU2My00OTcxZjJmMDgyZmYiLCJyb2xlIjoiU0FMRVMiLCJpYXQiOjE3NTM2ODM2MTUsImV4cCI6MTc1Mzc3MDAxNX0.vAKibNtTHIWo0EJ2v8dDIv-sS_tEfubt0OqxftaiJ1g",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/quotations/b615848b-1daf-4cb0-b7c4-7a6eab83eb9a/approve",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"quotations",
+						"b615848b-1daf-4cb0-b7c4-7a6eab83eb9a",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetQuote",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkZTcwYTEyYS0wNGM5LTQ2MWUtYmJlNS02N2YwZjQzZjJlNTIiLCJyb2xlIjoiQ1VTVE9NRVIiLCJjdXN0b21lcklkIjoiYTNmMzJjMTYtNjgyYy00NGUzLTg3MmMtNTNlZWJiYTE1ZDY0IiwiaWF0IjoxNzUzNjk4OTA4LCJleHAiOjE3NTM3ODUzMDh9.pdviwZrwzzZqZMR7Exn0NH6pN6V-5tPntCGGCY_WKNw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/quotations?status=APPROVED&date=2025-07-28T08:00:12.407Z",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"quotations"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "APPROVED"
+						},
+						{
+							"key": "date",
+							"value": "2025-07-28T08:00:12.407Z"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateSalesOrder",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMDA5YTRjNS1mZGY0LTQ5NjEtODU2My00OTcxZjJmMDgyZmYiLCJyb2xlIjoiU0FMRVMiLCJpYXQiOjE3NTM2ODk3MDYsImV4cCI6MTc1Mzc3NjEwNn0.jk6mSZKpX_i7W3H9gEetxBnJ1sP1jSP1CkuaO4w7B5s",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"quotationId\": \"03dae15c-e80a-44c4-a770-412e8da5d6dc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/sales-orders",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sales-orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSalesOrderByQuotationId",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMDA5YTRjNS1mZGY0LTQ5NjEtODU2My00OTcxZjJmMDgyZmYiLCJyb2xlIjoiU0FMRVMiLCJpYXQiOjE3NTM2OTk3MDcsImV4cCI6MTc1Mzc4NjEwN30.wR6Gc8jRXSWjhFDuAAgrxqMC1jwXM2RS12EPnqzjcfY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/sales-orders/f3666d05-490a-4130-ab95-5aafc518b230",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sales-orders",
+						"f3666d05-490a-4130-ab95-5aafc518b230"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSalesOrder",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMDA5YTRjNS1mZGY0LTQ5NjEtODU2My00OTcxZjJmMDgyZmYiLCJyb2xlIjoiU0FMRVMiLCJpYXQiOjE3NTM2OTk3MDcsImV4cCI6MTc1Mzc4NjEwN30.wR6Gc8jRXSWjhFDuAAgrxqMC1jwXM2RS12EPnqzjcfY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/sales-orders",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"sales-orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterUser",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"sales1\",\n    \"email\": \"sales1@gmail.com\",\n    \"role\": \"SALES\"\n    // \"customerId\": \"a3f32c16-682c-44e3-872c-53eebba15d64\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/auth/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"sales1@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/auth/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProducts",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhMDA5YTRjNS1mZGY0LTQ5NjEtODU2My00OTcxZjJmMDgyZmYiLCJyb2xlIjoiU0FMRVMiLCJpYXQiOjE3NTM2NzY0ODQsImV4cCI6MTc1Mzc2Mjg4NH0.pXdvVLqKVIh9_-_HqEnWrKHaQVjrSoDo0NNiJw1rHfo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/products",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
