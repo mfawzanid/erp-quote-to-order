@@ -38,7 +38,11 @@ export const getQuotations = async () => {
 };
 
 export async function approveQuotation(id: string) {
-  const res = await axios.put(`${API_URL}/quotations/${id}/approve`, { withCredentials: true });
+  const res = await axios.put(
+    `${API_URL}/quotations/${id}/approve`,
+    {}, // without request body
+    { withCredentials: true }
+  );
   return res.data;
 }
 
