@@ -49,7 +49,7 @@ export async function approveQuotation(id: string) {
 export const getSalesOrders = async () => {
   const res = await axios.get(`${API_URL}/sales-orders`, { withCredentials: true });
   return {
-    items: res.data.data.items,
+    items: res.data.data,
     total: res.data.total,
   };
 };

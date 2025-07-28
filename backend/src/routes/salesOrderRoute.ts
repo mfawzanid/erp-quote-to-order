@@ -6,7 +6,6 @@ import { Role } from "../types/role";
 
 const router = Router();
 
-
 router.post("/", authenticate([Role.SALES]), asyncHandler(salesOrderController.createSalesOrder));
 router.get("/:quotationId", authenticate(), salesOrderController.getSalesOrderByQuotationId);
 router.get("/", authenticate(), salesOrderController.getSalesOrders);

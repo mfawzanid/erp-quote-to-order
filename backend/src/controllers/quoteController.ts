@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as quoteService from "../services/quoteService";
+import * as salesOrderService from "../services/salesOrderService";
 import { AuthenticatedRequest } from "../middlewares/authMiddleware";
 
 
@@ -21,8 +22,14 @@ export const approveQuotation = async (req: AuthenticatedRequest, res: Response)
     const { userId } = (req as AuthenticatedRequest).user!;
     const { id } = req.params;
 
-    const item = await quoteService.approveQuotation({ id, userId });
-    res.status(200).json(item);
+    const quotation = await quoteService.approveQuotation({ id, userId });
+    const salesOrder = await salesOrderService.createSalesOrder(id, userId);
+
+    res.status(200).json({
+        message: "quotation approved and sales order created.",
+        quotation,
+        salesOrder,
+    });
 };
 
 
